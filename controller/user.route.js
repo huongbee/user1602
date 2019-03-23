@@ -9,6 +9,10 @@ route.get('/register',(req,res)=>{
 })
 route.post('/register',(req,res)=>{
     const { email, password, password_comfirmation } = req.body
+    if(!email || email==''){
+        req.flash('error_message','Please enter email')
+        return res.redirect('/user/register')
+    }
     if(password !==password_comfirmation){
         req.flash('error_message','Password confirmation not match')
         return res.redirect('/user/register')
