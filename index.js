@@ -8,7 +8,6 @@ const app = express();
 
 app.set('view engine','ejs')
 app.use(bodyParser.urlencoded({extended:false}))
-app.use('/user',userRouter)
 
 app.use(session({  //5
     secret: 'secret',
@@ -20,6 +19,7 @@ app.use((req,res,next)=>{ //3
     res.locals.error_message = req.flash('error_message')
     next()
 })
+app.use('/user',userRouter)
 
 
 app.listen(3000,()=>{console.log('Server started!')})
