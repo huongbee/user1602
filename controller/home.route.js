@@ -2,19 +2,12 @@ const express = require('express')
 const route = express.Router()
 const {verify} = require('../lib/jwt')
 const User = require('../model/User')
+const checkLogin = require('../lib/checklogin')
 
-route.get('/',(req,res)=>{
-    const token = req.cookies.token 
-    if(!token){
-        req.flash('error_message','Login first 1!')
-        return res.redirect('/user/login')
-    }
-    //check token 
-    verify(token)
-    .then(user=>{
-        //find user in db
-        return User.findById(user.id)
-    })
+route.get('/',checkLogin,(req,res)=>{
+    const userId = res.locals.userId
+    console.log(userId)
+    User.findById(userId)
     .then(userInfo=>{
         if(!userInfo){
             req.flash('error_message','Login first 3!')

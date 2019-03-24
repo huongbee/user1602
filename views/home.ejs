@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <h4>Hello, <%= fullname !=''? fullname : 'guest'%></h4>
+        <h4>Hello, <%= fullname != null ? fullname : 'guest'%></h4>
         <div>
             <a href="/logout">Logout</a>
         </div>
