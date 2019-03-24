@@ -3,6 +3,7 @@ const { hash, compare } = require('../lib/bcrypt')
 const { sign, verify } = require('../lib/jwt')
 const UserModel = require('../model/User')
 const route = express.Router()
+const {checkLogin ,redirectIfLoggedIn } = require('../lib/checklogin')
 
 
 route.get('/register',(req,res)=>{
@@ -34,7 +35,7 @@ route.post('/register',(req,res)=>{
         return res.redirect('/user/register')
     })
 })
-route.get('/login',(req,res)=>{
+route.get('/login',redirectIfLoggedIn,(req,res)=>{
     res.render('login');
 })
 route.post('/login',(req,res)=>{
@@ -80,7 +81,7 @@ route.post('/login',(req,res)=>{
 })
 
 
-route.get('/logout',(req,res)=>{
-    
+route.get('/logout',checkLogin,(req,res)=>{
+    res.clearCookie('token').redirect('/user/login')
 })
 module.exports = route

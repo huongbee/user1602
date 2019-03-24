@@ -2,7 +2,7 @@ const express = require('express')
 const route = express.Router()
 const {verify} = require('../lib/jwt')
 const User = require('../model/User')
-const checkLogin = require('../lib/checklogin')
+const {checkLogin} = require('../lib/checklogin')
 
 route.get('/',checkLogin,(req,res)=>{
     const userId = res.locals.userId
