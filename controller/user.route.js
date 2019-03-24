@@ -1,5 +1,6 @@
 const express = require('express')
 const { hash, compare } = require('../lib/bcrypt')
+const { sign, verify } = require('../lib/jwt')
 const UserModel = require('../model/User')
 const route = express.Router()
 
@@ -48,19 +49,27 @@ route.post('/login',(req,res)=>{
         else{
             // compare password
             compare(password,user.password)
-            .then(result=>{
-                if(result){
-                    // login in success
-                    // jwt 
-                       
-                    // save cookie
-                    res.send(user)
+            .then(user=>{
+                if(user) {
+                    // sign token
+                    return sign({
+                        id:user._id,
+                        email:user.email
+                    })
                 }
                 else{
                     req.flash('error_message','Password invalid!')
                     return res.redirect('/user/login')
                 }
-            })            
+            }) 
+            .then(token=>{ // get token line 54
+                // save cookie-parser and remember 1 hour
+                res.cookie('token',token,{maxAge:60000}).redirect('/')
+            })
+            .catch(()=>{ //return from compare() || sign() 
+                req.flash('error_message','Something wrong!')
+                return res.redirect('/user/login')
+            })        
         }
     })
     .catch((err)=>{
