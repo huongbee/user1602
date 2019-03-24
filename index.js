@@ -1,6 +1,8 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const userRouter = require('./controller/user.route')
+const homeRouter = require('./controller/home.route')
+
 require('./lib/dbconnect')
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash'); //1
@@ -22,9 +24,6 @@ app.use((req,res,next)=>{ //3
     next()
 })
 app.use('/user',userRouter)
+app.use('/',homeRouter)
 
-app.get('/',(req,res)=>{
-    const token = req.cookies.token 
-    res.send({token})
-})
 app.listen(3000,()=>{console.log('Server started!')})

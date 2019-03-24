@@ -49,8 +49,8 @@ route.post('/login',(req,res)=>{
         else{
             // compare password
             compare(password,user.password)
-            .then(user=>{
-                if(user) {
+            .then((check)=>{
+                if(check) {
                     // sign token
                     return sign({
                         id:user._id,
@@ -63,8 +63,8 @@ route.post('/login',(req,res)=>{
                 }
             }) 
             .then(token=>{ // get token line 54
-                // save cookie-parser and remember 1 hour
-                res.cookie('token',token,{maxAge:60000}).redirect('/')
+                // save cookie-parser and remember in 1 hour
+                res.cookie('token',token,{maxAge:3600000}).redirect('/')
             })
             .catch(()=>{ //return from compare() || sign() 
                 req.flash('error_message','Something wrong!')
@@ -77,5 +77,10 @@ route.post('/login',(req,res)=>{
         req.flash('error_message','Cannot find user 2')
         return res.redirect('/user/login')
     })
+})
+
+
+route.get('/logout',(req,res)=>{
+    
 })
 module.exports = route
